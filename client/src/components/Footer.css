@@ -1,0 +1,290 @@
+/* ═══════════════════════════════════════════════════════════════
+   Sewaam Foundation — Footer  (warm light theme)
+═══════════════════════════════════════════════════════════════ */
+
+.footer-wrap {
+    background: linear-gradient(180deg, #12071a 0%, #0d0412 100%);
+    color: #e5e7eb;
+    padding-top: 60px;
+    border-top: 3px solid #f5a623;
+}
+
+.footer-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px 50px;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.2fr 1.2fr;
+    gap: 40px;
+}
+
+/* ── Brand column ── */
+.footer-logo-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    background: #ffffff;
+    padding: 6px 14px;
+    border-radius: 8px;
+}
+
+.footer-logo-img {
+    height: 32px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.footer-brand-desc {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #ffffff;
+    margin: 0 0 14px 0;
+    max-width: 300px;
+}
+
+.footer-cert-badge {
+    display: inline-block;
+    background: rgba(245, 166, 35, 0.12);
+    border: 1px solid rgba(245, 166, 35, 0.4);
+    color: #f5a623;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+    letter-spacing: 0.3px;
+}
+
+/* ── Social buttons ── */
+.footer-socials {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.footer-social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.15s, opacity 0.15s;
+}
+
+.footer-social-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.footer-social-btn--yt {
+    background: #ff0000;
+    color: #fff;
+}
+
+.footer-social-btn--ig {
+    background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: #fff;
+}
+
+/* ── Headings ── */
+.footer-heading {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 18px 0;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.footer-heading::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+}
+
+/* ── Links ── */
+.footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links-list li {
+    margin-bottom: 11px;
+}
+
+.footer-links-list a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: color 0.15s, transform 0.15s;
+    display: inline-block;
+}
+
+.footer-links-list a:hover {
+    color: #f5a623;
+    transform: translateX(3px);
+}
+
+.footer-links-list span {
+    color: #ffffff;
+    font-size: 13.5px;
+}
+
+/* ── Contact ── */
+.footer-contact-item {
+    font-size: 13.5px;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.footer-contact-icon {
+    flex-shrink: 0;
+}
+
+.footer-donate-pill {
+    margin-top: 18px;
+    background: #f5a623;
+    color: #12071a;
+    font-size: 13.5px;
+    font-weight: 800;
+    padding: 10px 22px;
+    border-radius: 9999px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.footer-donate-pill:hover {
+    background: #e8960f;
+    transform: translateY(-1px);
+}
+
+/* ── QR Code ── */
+.footer-qr-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 14px 0 10px;
+}
+
+.footer-qr-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #fff;
+    padding: 6px;
+    box-sizing: border-box;
+    border: 2px solid rgba(245,166,35,0.3);
+}
+
+.footer-qr-fallback {
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 2px dashed rgba(245,166,35,0.3);
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.footer-qr-label {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+/* ── Bottom bar ── */
+.footer-bottom-bar {
+    border-top: 1px solid rgba(245, 166, 35, 0.15);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 18px 24px;
+}
+
+.footer-bottom-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: #6b7280;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+/* ── Payment icons ── */
+.footer-payments {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.footer-payments-label {
+    font-size: 11.5px;
+    color: #888;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.footer-pay-chip {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    min-width: 36px;
+}
+
+.footer-pay-chip--mc {
+    padding: 3px 6px;
+}
+
+.footer-slogan {
+    color: #f5a623;
+    font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 992px) {
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 580px) {
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .footer-bottom-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}

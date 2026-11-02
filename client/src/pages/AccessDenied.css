@@ -1,0 +1,191 @@
+/* ═══════════════════════════════════════════════════════════════
+   Access Denied Page
+═══════════════════════════════════════════════════════════════ */
+
+.ad-page {
+    min-height: 100vh;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 24px;
+}
+
+/* ── Corner decorations (black + yellow) ── */
+.ad-corner {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.ad-corner--tl {
+    top: -80px;
+    left: -80px;
+    background: conic-gradient(from 225deg, #111 0deg 90deg, #f5a623 90deg 180deg, transparent 180deg);
+}
+
+.ad-corner--br {
+    bottom: -80px;
+    right: -80px;
+    background: conic-gradient(from 45deg, #111 0deg 90deg, #f5a623 90deg 180deg, transparent 180deg);
+}
+
+/* ── Shield watermark ── */
+.ad-shield-watermark {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.ad-shield-watermark svg {
+    width: 100%;
+    height: auto;
+}
+
+/* ── Main content ── */
+.ad-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 1;
+    position: relative;
+}
+
+/* ── 4🔒4 ── */
+.ad-error-code {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.ad-four {
+    font-size: 120px;
+    font-weight: 900;
+    color: #111;
+    letter-spacing: -4px;
+    line-height: 1;
+}
+
+.ad-lock-circle {
+    width: 96px;
+    height: 96px;
+    background: #f5a623;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(245,166,35,0.35);
+    animation: ad-bounce 2.5s ease-in-out infinite;
+}
+
+@keyframes ad-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+
+/* Spark lines around lock */
+.ad-spark {
+    position: absolute;
+    background: #f5a623;
+    border-radius: 2px;
+}
+
+.ad-spark--1 {
+    width: 3px;
+    height: 12px;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(15deg);
+    animation: ad-spark-flash 1.8s ease-in-out infinite;
+}
+
+.ad-spark--2 {
+    width: 3px;
+    height: 10px;
+    top: -12px;
+    right: 10px;
+    transform: rotate(35deg);
+    animation: ad-spark-flash 1.8s ease-in-out infinite 0.3s;
+}
+
+.ad-spark--3 {
+    width: 3px;
+    height: 10px;
+    top: -12px;
+    left: 10px;
+    transform: rotate(-35deg);
+    animation: ad-spark-flash 1.8s ease-in-out infinite 0.6s;
+}
+
+@keyframes ad-spark-flash {
+    0%, 100% { opacity: 1; transform: translateX(-50%) rotate(15deg) scaleY(1); }
+    50%       { opacity: 0.3; transform: translateX(-50%) rotate(15deg) scaleY(0.5); }
+}
+
+/* ── Heading ── */
+.ad-title {
+    font-size: 48px;
+    font-weight: 900;
+    color: #111;
+    margin: 0 0 14px;
+    letter-spacing: -1px;
+}
+
+.ad-title--yellow {
+    color: #f5a623;
+}
+
+/* ── Description ── */
+.ad-desc {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.65;
+    margin: 0 0 36px;
+    max-width: 420px;
+}
+
+/* ── CTA button ── */
+.ad-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: #f5a623;
+    color: #111;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.38);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.ad-home-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(245,166,35,0.5);
+    background: #e8960a;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .ad-four       { font-size: 80px; }
+    .ad-lock-circle { width: 68px; height: 68px; }
+    .ad-lock-circle svg { width: 30px; height: 30px; }
+    .ad-title      { font-size: 34px; }
+    .ad-desc       { font-size: 14px; }
+    .ad-shield-watermark { display: none; }
+    .ad-corner     { width: 120px; height: 120px; }
+}

@@ -1,0 +1,515 @@
+/* ============================================================
+   Sewaam Foundation — Donate Page
+   Matches the two-panel card design (poster left, form right)
+   ============================================================ */
+
+/* Page shell */
+.donate-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    background: #fff5f5;
+    box-sizing: border-box;
+}
+
+/* Outer card with red border */
+.donate-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    max-width: 1080px;
+    border: 1.5px solid #f4a0a5;
+    border-radius: 26px;
+    background: #fff;
+    box-shadow: 0 10px 40px rgba(180, 40, 60, 0.1);
+    overflow: hidden;
+}
+
+/* ── Left poster panel ── */
+.donate-poster-panel {
+    position: relative;
+    min-height: 600px;
+    background: #111;
+    overflow: hidden;
+    border-radius: 18px 0 0 18px;
+}
+
+.donate-poster-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(100%);
+}
+
+/* Dark gradient overlay */
+.donate-poster-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(10, 10, 10, 0.72) 0%,
+        rgba(10, 10, 10, 0.38) 55%,
+        rgba(10, 10, 10, 0.15) 100%
+    );
+}
+
+/* Text sitting on top of overlay */
+.donate-poster-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 36px 36px 40px;
+}
+
+.donate-poster-brand {
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.donate-poster-brand::after {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: #e03040;
+    border-radius: 2px;
+}
+
+.donate-poster-heading {
+    margin: 0 0 14px;
+    color: #fff;
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+
+.donate-poster-heading span {
+    color: #e03040;
+}
+
+.donate-poster-sub {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    line-height: 1.65;
+    max-width: 300px;
+}
+
+/* ── Right form panel ── */
+.donate-form-panel {
+    padding: 32px 36px 28px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Eyebrow pill */
+.donate-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 14px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: #fde8ea;
+    color: #d9283a;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Headline */
+.donate-title {
+    margin: 0 0 10px;
+    font-size: clamp(22px, 2.2vw, 28px);
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1.25;
+}
+
+.donate-title-accent {
+    color: #e03040;
+    text-decoration: underline;
+    text-decoration-color: #e03040;
+    text-underline-offset: 4px;
+}
+
+/* Subtitle */
+.donate-desc {
+    margin: 0 0 22px;
+    color: #666;
+    font-size: 13.5px;
+    line-height: 1.65;
+}
+
+/* Form stacking */
+.donate-form-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ── Amount input box ── */
+.donate-amount-box {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-height: 54px;
+    padding: 0;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+    cursor: text;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.donate-amount-box:focus-within {
+    border-color: #e03040;
+    box-shadow: 0 0 0 3px rgba(224, 48, 64, 0.1);
+}
+
+.donate-currency {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 16px;
+    color: #e03040;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.donate-currency-symbol {
+    font-size: 18px;
+}
+
+.donate-amount-divider {
+    width: 1px;
+    height: 28px;
+    background: #e5dedd;
+    flex-shrink: 0;
+}
+
+.donate-amount-box input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 16px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #1a1a1a;
+    font: inherit;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Hide the browser spinner arrows — they cause jumpy UX */
+.donate-amount-box input::-webkit-outer-spin-button,
+.donate-amount-box input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.donate-amount-box input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* ── Breakdown card ── */
+.donate-breakdown {
+    padding: 14px 18px;
+    border: 1.5px solid #fbbfc4;
+    border-radius: 14px;
+    background: #fff5f6;
+}
+
+.donate-bd-total {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1.5px solid #f4b8bc;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.donate-bd-total span:nth-child(2) {
+    flex: 1;
+    color: #e03040;
+}
+
+.donate-bd-total-value {
+    color: #e03040;
+    font-size: 16px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* ── Fields ── */
+.donate-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.donate-field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.donate-required {
+    color: #e03040;
+    margin-left: 1px;
+}
+
+.donate-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-height: 46px;
+    border: 1.5px solid #ddd;
+    border-radius: 11px;
+    background: #fff;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.donate-input-wrap:focus-within {
+    border-color: #e03040;
+    box-shadow: 0 0 0 3px rgba(224, 48, 64, 0.09);
+}
+
+.donate-input-icon {
+    flex-shrink: 0;
+    margin: 0 12px;
+    color: #e03040;
+}
+
+.donate-input-wrap input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 12px 11px 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #1a1a1a;
+    font: inherit;
+    font-size: 14px;
+}
+
+.donate-input-wrap input::placeholder {
+    color: #aaa;
+}
+
+/* Two-column grid for email + phone */
+.donate-two-col {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+}
+
+/* ── Checkboxes ── */
+.donate-checks {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+}
+
+.donate-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 12.5px;
+    color: #444;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.donate-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: #e03040;
+    cursor: pointer;
+}
+
+/* Terms line */
+.donate-terms {
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.6;
+}
+
+.donate-terms a {
+    color: #c8202e;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.donate-terms a:hover {
+    text-decoration: underline;
+}
+
+/* Error box */
+.donate-error {
+    padding: 11px 16px;
+    border-radius: 10px;
+    background: #fff0f0;
+    border: 1px solid #f5b0b5;
+    color: #c0202e;
+    font-size: 13.5px;
+}
+
+/* ── Submit button ── */
+.donate-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 54px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #e03040;
+    box-shadow: 0 4px 0 #8b0f1c;
+    color: #fff;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 750;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.15s, box-shadow 0.15s;
+}
+
+.donate-submit:hover:not(:disabled) {
+    background: #c8202e;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 #8b0f1c;
+}
+
+.donate-submit:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #8b0f1c;
+}
+
+.donate-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Secure note below button */
+.donate-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 0;
+    color: #999;
+    font-size: 11.5px;
+}
+
+.donate-secure svg {
+    color: #e03040;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 900px) {
+    .donate-layout {
+        max-width: 680px;
+        grid-template-columns: 1fr;
+    }
+
+    .donate-poster-panel {
+        min-height: 280px;
+        max-height: 320px;
+        border-radius: 18px 18px 0 0;
+    }
+
+    .donate-poster-img {
+        object-position: center 30%;
+    }
+
+    .donate-poster-text {
+        padding: 24px 28px 28px;
+    }
+
+    .donate-poster-heading {
+        font-size: 30px;
+    }
+
+    .donate-form-panel {
+        padding: 28px 28px 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .donate-page {
+        padding: 16px 12px;
+        align-items: flex-start;
+    }
+
+    .donate-layout {
+        border-radius: 20px;
+    }
+
+    .donate-poster-panel {
+        min-height: 220px;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .donate-poster-text {
+        padding: 18px 20px 22px;
+    }
+
+    .donate-poster-heading {
+        font-size: 26px;
+    }
+
+    .donate-form-panel {
+        padding: 22px 18px 20px;
+    }
+
+    .donate-two-col,
+    .donate-checks {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .donate-title {
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 400px) {
+    .donate-form-panel {
+        padding: 18px 14px 16px;
+    }
+
+    .donate-amount-box input {
+        font-size: 18px;
+    }
+}

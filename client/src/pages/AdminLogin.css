@@ -1,0 +1,216 @@
+/* ═════════════════════════════════════════════════════════════════
+   Sewaam Foundation — AdminLogin.css
+   Modern, Centered, High-End Card Design (Strict Red Palette)
+═════════════════════════════════════════════════════════════════ */
+
+.admin-login-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px 90px;
+    background: linear-gradient(180deg, #f8fafc 0%, #edf0f5 100%);
+}
+
+.login-card {
+    background: #ffffff;
+    max-width: 440px;
+    width: 100%;
+    border-radius: 24px;
+    padding: 44px 38px 40px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    position: relative;
+    animation: fadeInCard 0.3s ease-out;
+}
+
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-logo-wrap {
+    display: inline-block;
+    margin-bottom: 22px;
+}
+
+.login-brand-logo {
+    height: 44px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.login-card h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #171717;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+}
+
+.login-subtitle {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0 0 28px 0;
+}
+
+.login-form {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 14.5px;
+    color: #1e293b;
+    background-color: #f8fafc;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.login-input:focus {
+    background-color: #ffffff;
+    border-color: #e60023;
+    box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.12);
+}
+
+.login-input::placeholder {
+    color: #94a3b8;
+}
+
+/* Password show/hide toggle */
+.login-pass-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.login-pass-wrap .login-input {
+    padding-right: 44px;
+}
+
+.login-pass-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+}
+
+.login-pass-toggle:hover { opacity: 1; }
+
+/* Error box */
+.login-error-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff0f2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+.error-msg {
+    background-color: #fff0f2;
+    border: 1px solid #fecaca;
+    color: #e60023;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin: 0;
+    text-align: left;
+}
+
+.login-submit-btn {
+    width: 100%;
+    background-color: #e60023;
+    color: #ffffff;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+    transition: background-color 0.18s ease, transform 0.15s ease, box-shadow 0.18s ease;
+    box-shadow: 0 4px 14px rgba(230, 0, 35, 0.25);
+}
+
+.login-submit-btn:hover:not(:disabled) {
+    background-color: #c90020;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(230, 0, 35, 0.35);
+}
+
+.login-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.login-hint-box {
+    margin-top: 24px;
+    padding: 12px 14px;
+    background-color: #f1f5f9;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.login-hint-box strong {
+    color: #1e293b;
+}
+
+.back-website-link {
+    display: inline-block;
+    margin-top: 18px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.back-website-link:hover {
+    color: #e60023;
+}
+

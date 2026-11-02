@@ -1,0 +1,2227 @@
+{
+	"info": {
+		"_postman_id": "sewaam-foundation-api-collection",
+		"name": "Sewaam Foundation API",
+		"description": "Complete API collection for the Sewaam Foundation backend.\n\nBase URL: http://localhost:5000\n\n## How to use\n1. Import this collection into Postman.\n2. Set the `base_url` variable to `http://localhost:5000` (already set as default).\n3. Start your server: `npm run dev`\n4. Run endpoints in order within each folder — POST first to create test data, then GET/PUT/DELETE.\n5. IDs like `{{campaign_id}}` are auto-captured from POST responses via test scripts.\n\n## Notes\n- Payment endpoints require valid Razorpay credentials in `.env`.\n- Do NOT use real payment data — sample bodies are for structure reference only.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "campaign_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "service_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "donation_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "donation_item_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "gallery_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "volunteer_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "contact_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "GET / — API Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						},
+						"description": "Returns a simple JSON confirming the API is running."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('API is running', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('running');",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Campaigns",
+			"description": "CRUD operations for fundraising campaigns.\n\nRoutes: `/api/campaigns`",
+			"item": [
+				{
+					"name": "POST — Create Campaign",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Test Education Campaign\",\n    \"slug\": \"test-education-campaign\",\n    \"description\": \"A test campaign for providing free education to underprivileged children.\",\n    \"image\": \"https://example.com/education.jpg\",\n    \"targetAmount\": 50000,\n    \"category\": \"Education\",\n    \"startDate\": \"2026-11-01\",\n    \"endDate\": \"2026-12-31\",\n    \"status\": \"Active\",\n    \"featured\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns"]
+						},
+						"description": "Create a new campaign. Required fields: title, slug, description, targetAmount."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Campaign created successfully', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.campaign).to.have.property('_id');",
+									"    pm.expect(json.campaign.title).to.eql('Test Education Campaign');",
+									"    pm.collectionVariables.set('campaign_id', json.campaign._id);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Active Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns"]
+						},
+						"description": "Fetch all campaigns with status 'Active'."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns campaigns array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.campaigns).to.be.an('array');",
+									"    pm.expect(json).to.have.property('count');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Campaign by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/campaigns/{{campaign_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns", "{{campaign_id}}"]
+						},
+						"description": "Fetch a single campaign by its MongoDB _id."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns single campaign', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.campaign).to.have.property('_id');",
+									"    pm.expect(json.campaign).to.have.property('title');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Campaign with Invalid ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/campaigns/invalid-id-here",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns", "invalid-id-here"]
+						},
+						"description": "Test error handling with an invalid MongoDB ObjectId."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Returns error for invalid ID', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Campaign (Missing Fields)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Incomplete Campaign\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns"]
+						},
+						"description": "Test validation: missing slug, description, and targetAmount."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error returned', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT — Update Campaign",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Education Campaign\",\n    \"targetAmount\": 75000,\n    \"featured\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/campaigns/{{campaign_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns", "{{campaign_id}}"]
+						},
+						"description": "Update an existing campaign. Only provided fields are changed."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Campaign updated', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.campaign.title).to.eql('Updated Education Campaign');",
+									"    pm.expect(json.campaign.targetAmount).to.eql(75000);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "DELETE — Delete Campaign",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/campaigns/{{campaign_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns", "{{campaign_id}}"]
+						},
+						"description": "Delete a campaign by ID. Run this LAST in the folder."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Campaign deleted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('deleted');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Campaign Not Found (after delete)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/campaigns/{{campaign_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns", "{{campaign_id}}"]
+						},
+						"description": "Verify the deleted campaign returns 404."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test('Campaign not found', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"description": "CRUD operations for foundation services.\n\nRoutes: `/api/services`",
+			"item": [
+				{
+					"name": "POST — Create Service",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Free Health Checkup Camp\",\n    \"description\": \"Monthly free health checkup camp for underprivileged communities.\",\n    \"image\": \"https://example.com/health.jpg\",\n    \"category\": \"Healthcare\",\n    \"location\": \"Delhi, India\",\n    \"status\": \"Active\",\n    \"featured\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/services",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services"]
+						},
+						"description": "Create a new service. Required: title, description."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Service created', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.service).to.have.property('_id');",
+									"    pm.collectionVariables.set('service_id', json.service._id);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Active Services",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/services",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services"]
+						},
+						"description": "Fetch all services with status 'Active'."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns services array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.services).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Service by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/services/{{service_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services", "{{service_id}}"]
+						},
+						"description": "Fetch a single active service by ID."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns single service', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.service).to.have.property('_id');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Service with Invalid ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/services/invalid-id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services", "invalid-id"]
+						},
+						"description": "Test error handling with invalid ObjectId."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Invalid ID error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Service (Missing Fields)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/services",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services"]
+						},
+						"description": "Test validation: missing description, empty title."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT — Update Service",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Health Camp\",\n    \"location\": \"Mumbai, India\",\n    \"featured\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/services/{{service_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services", "{{service_id}}"]
+						},
+						"description": "Update an existing service."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Service updated', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.service.title).to.eql('Updated Health Camp');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "DELETE — Delete Service",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/services/{{service_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "services", "{{service_id}}"]
+						},
+						"description": "Delete a service by ID."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Service deleted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('deleted');",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Donation Items",
+			"description": "CRUD operations for donation items (things donors can contribute).\n\nRoutes: `/api/donation-items`",
+			"item": [
+				{
+					"name": "POST — Create Donation Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"School Kit\",\n    \"description\": \"Complete school supplies kit including notebook, pen, pencil, eraser and bag.\",\n    \"price\": 500,\n    \"image\": \"https://example.com/school-kit.jpg\",\n    \"category\": \"Education\",\n    \"unit\": \"kit\",\n    \"isAvailable\": true,\n    \"isFeatured\": true,\n    \"sortOrder\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/donation-items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items"]
+						},
+						"description": "Create a new donation item. Required: name, description, price."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Donation item created', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.item).to.have.property('_id');",
+									"    pm.expect(json.item.price).to.eql(500);",
+									"    pm.collectionVariables.set('donation_item_id', json.item._id);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Donation Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donation-items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items"]
+						},
+						"description": "Fetch all available donation items (isAvailable: true)."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns items array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.items).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Donation Item by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donation-items/{{donation_item_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items", "{{donation_item_id}}"]
+						},
+						"description": "Fetch a single available donation item by ID."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns single item', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.item).to.have.property('name');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Donation Item (Missing Fields)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Incomplete Item\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/donation-items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items"]
+						},
+						"description": "Test validation: missing description and price."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Donation Item (Invalid Price)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bad Price Item\",\n    \"description\": \"Test item with invalid price\",\n    \"price\": -50\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/donation-items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items"]
+						},
+						"description": "Test validation: negative price."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Price validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT — Update Donation Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Premium School Kit\",\n    \"price\": 750,\n    \"isFeatured\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/donation-items/{{donation_item_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items", "{{donation_item_id}}"]
+						},
+						"description": "Update an existing donation item."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Donation item updated', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.item.name).to.eql('Premium School Kit');",
+									"    pm.expect(json.item.price).to.eql(750);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "DELETE — Delete Donation Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donation-items/{{donation_item_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donation-items", "{{donation_item_id}}"]
+						},
+						"description": "Delete a donation item by ID."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Item deleted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('deleted');",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Gallery",
+			"description": "CRUD operations for gallery items (images/videos).\n\nRoutes: `/api/gallery`",
+			"item": [
+				{
+					"name": "POST — Create Gallery Item (Image)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Food Distribution Drive 2026\",\n    \"description\": \"Photos from our weekly food distribution drive in Old Delhi.\",\n    \"mediaType\": \"Image\",\n    \"mediaUrl\": \"https://example.com/food-drive.jpg\",\n    \"thumbnailUrl\": \"https://example.com/food-drive-thumb.jpg\",\n    \"category\": \"Food Distribution\",\n    \"eventDate\": \"2026-10-15\",\n    \"featured\": true,\n    \"isPublished\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"]
+						},
+						"description": "Create a new gallery item. Required: title, mediaType (Image|Video), mediaUrl."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Gallery item created', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.item).to.have.property('_id');",
+									"    pm.expect(json.item.mediaType).to.eql('Image');",
+									"    pm.collectionVariables.set('gallery_id', json.item._id);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Gallery Item (Invalid mediaType)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Bad Gallery Item\",\n    \"mediaType\": \"Audio\",\n    \"mediaUrl\": \"https://example.com/audio.mp3\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"]
+						},
+						"description": "Test validation: mediaType must be Image or Video."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Gallery Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"]
+						},
+						"description": "Fetch all published gallery items."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns items array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.items).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Gallery Item by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery/{{gallery_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", "{{gallery_id}}"]
+						},
+						"description": "Fetch a single published gallery item."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns single item', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.item).to.have.property('title');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT — Update Gallery Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Food Drive Photos\",\n    \"featured\": false,\n    \"category\": \"Event\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery/{{gallery_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", "{{gallery_id}}"]
+						},
+						"description": "Update an existing gallery item."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Gallery item updated', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.item.title).to.eql('Updated Food Drive Photos');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "DELETE — Delete Gallery Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery/{{gallery_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", "{{gallery_id}}"]
+						},
+						"description": "Delete a gallery item by ID."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Item deleted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('deleted');",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Volunteers",
+			"description": "Volunteer application submission and admin management.\n\nRoutes: `/api/volunteers`",
+			"item": [
+				{
+					"name": "POST — Submit Volunteer Application",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Rahul Sharma\",\n    \"email\": \"rahul.test@example.com\",\n    \"phone\": \"+91-9876543210\",\n    \"age\": 25,\n    \"city\": \"Delhi\",\n    \"interests\": [\"Education\", \"Healthcare\"],\n    \"availability\": \"Weekends\",\n    \"message\": \"I want to contribute to the community.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/volunteers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers"]
+						},
+						"description": "Public: submit a volunteer application. Required: fullName, email, phone."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Application submitted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json).to.have.property('volunteerId');",
+									"    pm.collectionVariables.set('volunteer_id', json.volunteerId);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Volunteer (Missing Fields)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Incomplete\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/volunteers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers"]
+						},
+						"description": "Test validation: missing email and phone."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Volunteer (Invalid Email)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Test User\",\n    \"email\": \"not-an-email\",\n    \"phone\": \"1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/volunteers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers"]
+						},
+						"description": "Test validation: invalid email format."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Email validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Volunteers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/volunteers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers"]
+						},
+						"description": "Admin: get all volunteer applications."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns volunteers array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.volunteers).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Volunteer by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/volunteers/{{volunteer_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers", "{{volunteer_id}}"]
+						},
+						"description": "Admin: get one volunteer application."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns volunteer', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.volunteer).to.have.property('fullName');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PATCH — Update Volunteer Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Approved\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/volunteers/{{volunteer_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers", "{{volunteer_id}}", "status"]
+						},
+						"description": "Admin: update status. Allowed: Pending, Contacted, Approved, Rejected."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Status updated', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.volunteer.status).to.eql('Approved');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PATCH — Update Volunteer (Invalid Status)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"InvalidStatus\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/volunteers/{{volunteer_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers", "{{volunteer_id}}", "status"]
+						},
+						"description": "Test validation: invalid status value."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Invalid status error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "DELETE — Delete Volunteer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/volunteers/{{volunteer_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "volunteers", "{{volunteer_id}}"]
+						},
+						"description": "Admin: delete a volunteer application."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Volunteer deleted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('deleted');",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Contact",
+			"description": "Contact form submission and admin management.\n\nRoutes: `/api/contact`",
+			"item": [
+				{
+					"name": "POST — Submit Contact Form",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Priya Verma\",\n    \"email\": \"priya.test@example.com\",\n    \"phone\": \"+91-9123456789\",\n    \"subject\": \"Volunteering Inquiry\",\n    \"message\": \"I would like to know more about volunteering opportunities at Sewaam Foundation.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact"]
+						},
+						"description": "Public: submit a contact message. Required: name, email, subject, message."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Contact submitted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json).to.have.property('contactId');",
+									"    pm.collectionVariables.set('contact_id', json.contactId);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Contact (Missing Fields)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact"]
+						},
+						"description": "Test validation: missing email, subject, message."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Contact (Invalid Email)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"invalid-email\",\n    \"subject\": \"Test\",\n    \"message\": \"Test message.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact"]
+						},
+						"description": "Test validation: invalid email format."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Email error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"    pm.expect(json.message).to.include('email');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Contacts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/contact",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact"]
+						},
+						"description": "Admin: get all contact messages."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns contacts array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.contacts).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Contact by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/contact/{{contact_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", "{{contact_id}}"]
+						},
+						"description": "Admin: get a single contact message."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns contact', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.contact).to.have.property('name');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PATCH — Update Contact Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"In Progress\",\n    \"adminNotes\": \"Following up with the sender via email.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact/{{contact_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", "{{contact_id}}", "status"]
+						},
+						"description": "Admin: update status and/or admin notes. Allowed statuses: New, In Progress, Resolved."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Contact updated', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.contact.status).to.eql('In Progress');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PATCH — Contact (Invalid Status)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Closed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact/{{contact_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", "{{contact_id}}", "status"]
+						},
+						"description": "Test validation: invalid status value."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Invalid status error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PATCH — Contact (Empty Body)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact/{{contact_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", "{{contact_id}}", "status"]
+						},
+						"description": "Test validation: no status or adminNotes provided."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Requires fields to update', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "DELETE — Delete Contact",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/contact/{{contact_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", "{{contact_id}}"]
+						},
+						"description": "Admin: delete a contact message."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Contact deleted', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.message).to.include('deleted');",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Donations",
+			"description": "Read-only donation endpoints (donations are created via Payments flow).\n\nRoutes: `/api/donations`",
+			"item": [
+				{
+					"name": "GET — Get Recent Donations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donations/recent",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donations", "recent"]
+						},
+						"description": "Public: get recent successful, non-anonymous donations for the website popup. Returns at most 10 items."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns donations array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.donations).to.be.an('array');",
+									"    pm.expect(json).to.have.property('count');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get All Donations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donations"]
+						},
+						"description": "Admin: get all donation records."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns donations array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(true);",
+									"    pm.expect(json.donations).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Get Donation by ID (Invalid)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donations/invalid-id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donations", "invalid-id"]
+						},
+						"description": "Test error handling with invalid ObjectId."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Invalid ID error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET — Donation Not Found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/donations/6600000000000000000a0001",
+							"host": ["{{base_url}}"],
+							"path": ["api", "donations", "6600000000000000000a0001"]
+						},
+						"description": "Test 404 with a valid but non-existent ObjectId."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test('Donation not found', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Payments (Razorpay)",
+			"description": "Payment order creation and verification.\n\nRoutes: `/api/payments`\n\n⚠️ These endpoints require valid RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env.\nSample bodies are for structure reference only. Do NOT make real payments.",
+			"item": [
+				{
+					"name": "POST — Create Order (Validation Test)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donorName\": \"\",\n    \"email\": \"\",\n    \"amount\": 500,\n    \"campaignId\": \"6600000000000000000a0001\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payments/create-order",
+							"host": ["{{base_url}}"],
+							"path": ["api", "payments", "create-order"]
+						},
+						"description": "Test validation: empty donorName and email should fail."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Order (Invalid Amount)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donorName\": \"Test Donor\",\n    \"email\": \"test@example.com\",\n    \"amount\": -100,\n    \"campaignId\": \"6600000000000000000a0001\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payments/create-order",
+							"host": ["{{base_url}}"],
+							"path": ["api", "payments", "create-order"]
+						},
+						"description": "Test validation: negative amount."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Amount validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Order (Invalid Campaign ID)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donorName\": \"Test Donor\",\n    \"email\": \"test@example.com\",\n    \"amount\": 500,\n    \"campaignId\": \"not-a-valid-id\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payments/create-order",
+							"host": ["{{base_url}}"],
+							"path": ["api", "payments", "create-order"]
+						},
+						"description": "Test validation: invalid campaignId format."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Campaign ID validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Create Order (Sample — requires active campaign)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donorName\": \"Test Donor\",\n    \"email\": \"donor.test@example.com\",\n    \"phone\": \"+91-9876543210\",\n    \"amount\": 500,\n    \"campaignId\": \"{{campaign_id}}\",\n    \"message\": \"Test donation for education\",\n    \"isAnonymous\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payments/create-order",
+							"host": ["{{base_url}}"],
+							"path": ["api", "payments", "create-order"]
+						},
+						"description": "⚠️ This will create a REAL Razorpay order if credentials are valid and campaign_id is set to an active campaign.\n\nTo test: first create a campaign with status 'Active', then use its ID here."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var status = pm.response.code;",
+									"",
+									"if (status === 201) {",
+									"    pm.test('Order created', function () {",
+									"        var json = pm.response.json();",
+									"        pm.expect(json.success).to.eql(true);",
+									"        pm.expect(json.order).to.have.property('id');",
+									"        pm.expect(json).to.have.property('donationId');",
+									"    });",
+									"} else if (status === 404) {",
+									"    pm.test('Campaign not found or inactive', function () {",
+									"        var json = pm.response.json();",
+									"        pm.expect(json.success).to.eql(false);",
+									"    });",
+									"} else {",
+									"    pm.test('Response received', function () {",
+									"        pm.expect(status).to.be.oneOf([201, 400, 404, 500]);",
+									"    });",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Verify Payment (Validation Test)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"razorpay_order_id\": \"\",\n    \"razorpay_payment_id\": \"\",\n    \"razorpay_signature\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payments/verify",
+							"host": ["{{base_url}}"],
+							"path": ["api", "payments", "verify"]
+						},
+						"description": "Test validation: empty payment details should fail."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Validation error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "POST — Verify Payment (Not Found)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"razorpay_order_id\": \"order_NONEXISTENT123\",\n    \"razorpay_payment_id\": \"pay_NONEXISTENT123\",\n    \"razorpay_signature\": \"abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payments/verify",
+							"host": ["{{base_url}}"],
+							"path": ["api", "payments", "verify"]
+						},
+						"description": "Test: verify with non-existent order should return 404."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test('Record not found', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.success).to.eql(false);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
+
