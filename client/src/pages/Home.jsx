@@ -5,38 +5,7 @@ import { getCampaigns, getDonationItems, createOrder, verifyPayment, getRecentDo
 import "./Home.css";
 
 // Sample campaigns — only used as fallback if no campaigns exist in DB or localStorage
-const sampleCampaigns = [
-    {
-        _id: "elders-shelter",
-        title: "Their Home Is Gone! These Elders Have No Shelter!",
-        targetAmount: 5000000,
-        raisedAmount: 590000,
-        donorsCount: 494,
-        image: "/images/campaign-elderly.jpg",
-        category: "Elders",
-        hasTaxBenefit: true
-    },
-    {
-        _id: "visually-impaired-children",
-        title: "They Never Saw The Light, But They Still Believed In It",
-        targetAmount: 7000000,
-        raisedAmount: 170000,
-        donorsCount: 139,
-        image: "/images/campaign-child-education.jpg",
-        category: "Children",
-        hasTaxBenefit: true
-    },
-    {
-        _id: "rebuild-heritage",
-        title: "Kashmir Awaits Lord Shiva's Return: Help Us Build His Abode!",
-        targetAmount: 2000000,
-        raisedAmount: 1030000,
-        donorsCount: 935,
-        image: "/images/campaign-temple-restoration.jpg",
-        category: "Heritage",
-        hasTaxBenefit: true
-    }
-];
+const sampleCampaigns = [];
 
 // Fallback essential needs — used only when API is unavailable
 const fallbackNeeds = [

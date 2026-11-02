@@ -15,33 +15,8 @@ function getEmbedUrl(url) {
     return url;
 }
 
-// Fallback demo items shown before admin adds anything
-const DEMO_ITEMS = [
-    {
-        id: "demo-1",
-        title: "Gau Seva Feeding Drive 🐄💚",
-        caption: "Our volunteers fed over 50 cows at the local goshala. Every animal deserves love and care.",
-        category: "Animal Care",
-        link: "",
-        thumb: "/images/campaign-elderly.jpg",
-    },
-    {
-        id: "demo-2",
-        title: "Food for Those in Need 🍛",
-        caption: "We distributed hot meals to 200+ elderly people living alone in Indore.",
-        category: "Food Distribution",
-        link: "",
-        thumb: "/images/hero-banner.jpg",
-    },
-    {
-        id: "demo-3",
-        title: "Education Drive 📚",
-        caption: "School kits and books distributed to underprivileged children in rural areas.",
-        category: "Community Help",
-        link: "",
-        thumb: "/images/campaign-child-education.jpg",
-    },
-];
+// Demo items shown before admin adds anything
+const DEMO_ITEMS = [];
 
 const CATEGORIES = ["All", "Animal Care", "Food Distribution", "Rescue", "Community Help", "Awareness"];
 
