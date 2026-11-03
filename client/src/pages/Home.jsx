@@ -452,6 +452,16 @@ export default function Home() {
             {/* ── 3. FEATURED CAMPAIGNS & GENERAL DONATION ───────────── */}
             <section className="section-featured-wrap" id="campaigns">
                 <div className="section-container">
+
+                    {/* ── Section intro header ── */}
+                    <div className="section-intro-block">
+                        <span className="section-badge">CAUSES WE SUPPORT</span>
+                        <h2 className="section-intro-heading">Support a Cause That Matters to You</h2>
+                        <p className="section-intro-sub">
+                            From education and healthcare to food, shelter, and community welfare — your support brings hope to those who need it most.
+                        </p>
+                    </div>
+
                     <div className="section-title-bar">
                         <div className="heading-with-line">
                             <h2 className="section-main-heading">Featured Campaigns</h2>
