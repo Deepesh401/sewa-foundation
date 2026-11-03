@@ -59,12 +59,6 @@ export default function CampaignCard({ campaign }) {
                 {/* organiser line */}
                 <p className="cc-organiser">
                     By <span className="cc-organiser-name">Sewaam Foundation</span>
-                    {campaign.hasTaxBenefit && (
-                        <span className="cc-tax-inline">
-                            <span className="cc-tax-gift">🎁</span>
-                            <span>Tax<br/>Benefit</span>
-                        </span>
-                    )}
                 </p>
 
                 {/* raised + donors */}
