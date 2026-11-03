@@ -83,9 +83,9 @@
 .site-nav-link:hover { color: #407a12; }
 .site-nav-link:hover::after { opacity: 1; transform: scaleX(1); }
 
-.site-nav-link.active { color: #e60023; font-weight: 700; }
+.site-nav-link.active { color: #ff6600; font-weight: 700; }
 .site-nav-link.active::after {
-    background: #e60023;
+    background: #ff6600;
     opacity: 1;
     transform: scaleX(1);
 }

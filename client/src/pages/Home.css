@@ -105,23 +105,26 @@
 }
 
 .section-main-heading {
-    font-size: 24px;
-    font-weight: 800;
-    color: #171717;
+    font-size: 30px;
+    font-weight: 700;
+    color: #407a12;
     margin: 0;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    line-height: 1.1;
 }
 
 .heading-red-accent {
     width: 44px;
     height: 3.5px;
-    background-color: #e60023;
+    background-color: #407a12;
     border-radius: 2px;
     margin-top: 6px;
 }
 
 .view-all-link {
-    color: #e60023;
+    color: #407a12;
     font-size: 14px;
     font-weight: 700;
     text-decoration: none;
