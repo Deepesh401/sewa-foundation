@@ -61,10 +61,42 @@ export default function CampaignCard({ campaign }) {
                     By <span className="cc-organiser-name">Sewaam Foundation</span>
                 </p>
 
-                {/* raised + donors */}
-                <div className="cc-stats-row">
-                    <span>Raised: <strong>{raisedAmount.toLocaleString("en-IN")}</strong></span>
-                    <span>Donors: <strong>{donorsCount}</strong></span>
+                {/* raised + donors — 3 stat boxes */}
+                <div className="cc-stats-boxes">
+                    <div className="cc-stat-box">
+                        <div className="cc-stat-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div className="cc-stat-text">
+                            <span className="cc-stat-label">Goal</span>
+                            <span className="cc-stat-value">{formatCurrencyLakhs(targetAmount)}</span>
+                        </div>
+                    </div>
+                    <div className="cc-stat-box">
+                        <div className="cc-stat-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div className="cc-stat-text">
+                            <span className="cc-stat-label">Raised</span>
+                            <span className="cc-stat-value">{formatCurrencyLakhs(raisedAmount)}</span>
+                        </div>
+                    </div>
+                    <div className="cc-stat-box">
+                        <div className="cc-stat-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div className="cc-stat-text">
+                            <span className="cc-stat-label">Donors</span>
+                            <span className="cc-stat-value">{donorsCount.toLocaleString("en-IN")}</span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* progress bar */}

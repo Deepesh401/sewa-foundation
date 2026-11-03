@@ -71,7 +71,9 @@
     font-weight: 500;
     color: #666666;
     margin-top: 2px;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
+    max-width: 100px;
 }
 
 .floating-stat-divider {
@@ -474,8 +476,8 @@
     .floating-stats-card {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        padding: 20px;
+        gap: 0;
+        padding: 0;
     }
 
     .floating-stat-divider {
@@ -484,6 +486,21 @@
 
     .floating-stat-item {
         justify-content: flex-start;
+        padding: 16px 20px;
+        border-right: 1px solid #f0f0f2;
+        border-bottom: 1px solid #f0f0f2;
+    }
+
+    /* remove right border on 2nd column */
+    .floating-stat-item:nth-child(odd) {
+        border-right: 1px solid #f0f0f2;
+    }
+    .floating-stat-item:nth-child(even) {
+        border-right: none;
+    }
+    /* remove bottom border on last row */
+    .floating-stat-item:nth-last-child(-n+2) {
+        border-bottom: none;
     }
 
     .featured-cards-grid {
@@ -500,9 +517,13 @@
     }
 
     .floating-stats-card {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 18px 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+        padding: 0;
+    }
+
+    .floating-stat-item {
+        padding: 14px 16px;
     }
 
     .needs-products-grid {
@@ -671,16 +692,18 @@
 
 @media (max-width: 768px) {
     .hero-slider-wrap { padding: 10px 10px 0; }
-    .hero-slider-card { height: 260px; border-radius: 14px; }
-    .hero-slider-content { padding: 20px 20px; }
+    .hero-slider-card { height: 280px; border-radius: 14px; }
+    .hero-slider-content { padding: 20px; max-width: 100%; }
+    .hero-slider-title { font-size: 20px; }
+    .hero-slider-subtitle { font-size: 12px; -webkit-line-clamp: 2; }
     .hero-slider-counter { bottom: 14px; right: 16px; }
     .hero-counter-current { font-size: 20px; }
-    .hero-slider-arrow { width: 32px; height: 32px; font-size: 18px; }
 }
 
 @media (max-width: 480px) {
-    .hero-slider-card { height: 220px; }
-    .hero-slider-title { font-size: 18px; }
+    .hero-slider-card { height: 240px; }
+    .hero-slider-title { font-size: 17px; }
+    .hero-slider-content { padding: 16px; }
 }
 
 
@@ -833,8 +856,8 @@
 }
 
 .need-add-btn:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+    opacity: 1;
+    cursor: pointer;
 }
 
 /* ── Cart Panel (right column) ── */
@@ -1140,5 +1163,16 @@
 }
 
 @media (max-width: 480px) {
-    .needs-products-grid { grid-template-columns: 1fr; }
+    .needs-products-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+}
+
+/* ── Mobile 2-col essential needs compact ── */
+@media (max-width: 480px) {
+    .need-img-box { height: 90px; }
+    .need-item-title { font-size: 12px; }
+    .need-item-subtitle { font-size: 11px; display: none; }
+    .need-item-price { font-size: 13px; }
+    .need-info-box { padding: 8px 10px 10px; }
+    .need-qty-selector button { width: 24px; height: 24px; font-size: 14px; }
+    .need-add-btn { font-size: 11px; padding: 7px 8px; }
 }
