@@ -257,21 +257,19 @@
     border-radius: 6px;
     text-decoration: none;
     border: none;
-    box-shadow: 0 4px 0 #b83030;
-    transition: background 0.18s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: none;
+    transition: background 0.18s ease, transform 0.15s ease;
     margin-top: auto;
 }
 
 .cc-donate-btn:hover {
     background: #e04444;
     transform: translateY(-1px);
-    box-shadow: 0 5px 0 #b83030;
     color: #ffffff;
 }
 
 .cc-donate-btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 #b83030;
+    transform: translateY(1px);
 }
 
 /* ── responsive ── */
