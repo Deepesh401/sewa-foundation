@@ -28,6 +28,20 @@ const siteSettingsSchema = new mongoose.Schema(
             default: "",
         },
 
+        heroSlides: {
+            type: [
+                {
+                    image:       { type: String, default: "" },
+                    title:       { type: String, default: "" },
+                    subtitle:    { type: String, default: "" },
+                    buttonLabel: { type: String, default: "Donate Now" },
+                    buttonLink:  { type: String, default: "/donate" },
+                    order:       { type: Number, default: 0 },
+                },
+            ],
+            default: [],
+        },
+
         contactEmail: {
             type: String,
             default: "",

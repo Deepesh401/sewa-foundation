@@ -1,8 +1,121 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CampaignCard from "../components/CampaignCard";
-import { getCampaigns, getDonationItems, createOrder, verifyPayment, getRecentDonations } from "../services/api";
+import { getCampaigns, getDonationItems, createOrder, verifyPayment, getRecentDonations, getHeroSlides } from "../services/api";
 import "./Home.css";
+
+// ── Hero Slider Component ────────────────────────────────────────────
+function HeroSlider() {
+    const [slides, setSlides]     = useState([]);
+    const [current, setCurrent]   = useState(0);
+    const [loaded, setLoaded]     = useState(false);
+    const timerRef                = useRef(null);
+
+    useEffect(() => {
+        getHeroSlides()
+            .then((d) => {
+                if (d?.slides?.length > 0) setSlides(d.slides);
+            })
+            .catch(() => {})
+            .finally(() => setLoaded(true));
+    }, []);
+
+    const next = useCallback(() => {
+        setCurrent((c) => (c + 1) % slides.length);
+    }, [slides.length]);
+
+    const prev = useCallback(() => {
+        setCurrent((c) => (c - 1 + slides.length) % slides.length);
+    }, [slides.length]);
+
+    // Auto-advance every 4 s
+    useEffect(() => {
+        if (slides.length < 2) return;
+        timerRef.current = setInterval(next, 4000);
+        return () => clearInterval(timerRef.current);
+    }, [slides.length, next]);
+
+    const pause = () => clearInterval(timerRef.current);
+    const resume = () => {
+        if (slides.length >= 2) timerRef.current = setInterval(next, 4000);
+    };
+
+    // Nothing to show yet or no slides configured
+    if (!loaded || slides.length === 0) return null;
+
+    const slide = slides[current];
+
+    return (
+        <section
+            className="hero-slider-wrap"
+            onMouseEnter={pause}
+            onMouseLeave={resume}
+        >
+            <div className="hero-slider-card">
+                {/* Background image */}
+                <div
+                    className="hero-slider-bg"
+                    style={{ backgroundImage: `url(${slide.image})` }}
+                />
+                {/* Dark gradient overlay */}
+                <div className="hero-slider-overlay" />
+
+                {/* Content */}
+                <div className="hero-slider-content">
+                    <h1 className="hero-slider-title">{slide.title}</h1>
+                    {slide.subtitle && (
+                        <p className="hero-slider-subtitle">{slide.subtitle}</p>
+                    )}
+                    <div className="hero-slider-actions">
+                        <Link
+                            to={slide.buttonLink || "/donate"}
+                            className="hero-slider-btn hero-slider-btn--primary"
+                        >
+                            {slide.buttonLabel || "Donate Now"} →
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Slide counter */}
+                <div className="hero-slider-counter">
+                    <span className="hero-counter-current">
+                        {String(current + 1).padStart(2, "0")}
+                    </span>
+                    <span className="hero-counter-sep">/</span>
+                    <span className="hero-counter-total">
+                        {String(slides.length).padStart(2, "0")}
+                    </span>
+                </div>
+
+                {/* Prev / Next arrows */}
+                {slides.length > 1 && (
+                    <>
+                        <button className="hero-slider-arrow hero-slider-arrow--prev" onClick={prev} aria-label="Previous slide">
+                            ‹
+                        </button>
+                        <button className="hero-slider-arrow hero-slider-arrow--next" onClick={next} aria-label="Next slide">
+                            ›
+                        </button>
+                    </>
+                )}
+            </div>
+
+            {/* Dot navigation */}
+            {slides.length > 1 && (
+                <div className="hero-slider-dots">
+                    {slides.map((_, i) => (
+                        <button
+                            key={i}
+                            className={`hero-dot${i === current ? " active" : ""}`}
+                            onClick={() => setCurrent(i)}
+                            aria-label={`Go to slide ${i + 1}`}
+                        />
+                    ))}
+                </div>
+            )}
+        </section>
+    );
+}
 
 // Sample campaigns — only used as fallback if no campaigns exist in DB or localStorage
 const sampleCampaigns = [];
@@ -268,21 +381,8 @@ export default function Home() {
     };
     return (
         <div className="home-container">
-            {/* ── 1. HERO BANNER ── */}
-            <section className="causes-hero">
-                {/* Text centered over full background image */}
-                <div className="causes-hero-center">
-                    <h1 className="causes-hero-title">
-                        Jaha Sewa Hai,<br />
-                        <span className="causes-hero-title-red">Waha Sewaam</span>
-                    </h1>
-                    <div className="causes-hero-rule">
-                        <span className="causes-hero-line" />
-                        <span className="causes-hero-heart">♥</span>
-                        <span className="causes-hero-line" />
-                    </div>
-                </div>
-            </section>
+            {/* ── 1. HERO SLIDER ── */}
+            <HeroSlider />
 
             {/* ── 2. FLOATING IMPACT STATISTICS BAR ─────────────────── */}
             <section className="floating-stats-wrapper">

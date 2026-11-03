@@ -39,5 +39,6 @@ export const getRecentDonations = () => getData("/donations/recent");
 export const getServices = () => getData("/services");
 export const getDonationItems = () => getData("/donation-items");
 export const getGalleryItems = () => getData("/gallery");
+export const getHeroSlides = () => getData("/hero-slides");
 export const submitVolunteer = (data) => postData("/volunteers", data);
 export const submitContact = (data) => postData("/contact", data);

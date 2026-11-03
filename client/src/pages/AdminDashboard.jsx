@@ -37,6 +37,7 @@ async function uploadToCloudinary(base64, folder = "sewaam/campaigns") {
 }
 
 const TABS = [
+    { id: "HeroSlider", label: "Hero Slider", icon: "🖼️" },
     { id: "Campaigns", label: "Donation Campaigns", icon: "📢" },
     { id: "Our Work", label: "Our Work (Reels & Stories)", icon: "🎬" },
     { id: "Donation Items", label: "Essential Needs Items", icon: "📦" },
@@ -116,6 +117,7 @@ export default function AdminDashboard() {
                 </header>
 
                 <div className="admin-body-content">
+                    {activeTab === "HeroSlider" && <HeroSliderPanel />}
                     {activeTab === "Campaigns" && <CampaignsPanel />}
                     {activeTab === "Our Work" && <OurWorkPanel />}
                     {activeTab === "Donation Items" && <DonationItemsPanel />}
@@ -467,6 +469,247 @@ function GalleryImagesUploader({ images = [], onChange }) {
                     Drag to reorder using ◀ ▶ arrows. First image shows by default.
                 </p>
             )}
+        </div>
+    );
+}
+
+// ── 0. HERO SLIDER PANEL ─────────────────────────────────────────────
+function HeroSliderPanel() {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+    const MAX_SLIDES = 4;
+
+    const emptySlide = () => ({ image: "", title: "", subtitle: "", buttonLabel: "Donate Now", buttonLink: "/donate" });
+
+    const [slides, setSlides]   = useState([emptySlide()]);
+    const [saving, setSaving]   = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [msg, setMsg]         = useState(null);
+    const fileRefs              = useRef([]);
+
+    // Load existing slides
+    useEffect(() => {
+        fetch(`${BASE_URL}/hero-slides`)
+            .then((r) => r.json())
+            .then((d) => {
+                if (d?.slides?.length > 0) {
+                    setSlides(d.slides.map((s) => ({ ...emptySlide(), ...s })));
+                }
+            })
+            .catch(() => {})
+            .finally(() => setLoading(false));
+    }, []);
+
+    const addSlide = () => {
+        if (slides.length >= MAX_SLIDES) return;
+        setSlides((prev) => [...prev, emptySlide()]);
+    };
+
+    const removeSlide = (i) => {
+        setSlides((prev) => prev.filter((_, idx) => idx !== i));
+    };
+
+    const updateSlide = (i, field, value) => {
+        setSlides((prev) => prev.map((s, idx) => idx === i ? { ...s, [field]: value } : s));
+    };
+
+    const handleImageFile = (i, file) => {
+        if (!file || !file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = (e) => updateSlide(i, "image", e.target.result);
+        reader.readAsDataURL(file);
+    };
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+        setSaving(true);
+        setMsg(null);
+
+        try {
+            // Upload any base64 images to Cloudinary first
+            const uploaded = [];
+            for (let i = 0; i < slides.length; i++) {
+                const s = slides[i];
+                if (!s.title.trim()) { setMsg({ type: "error", text: `Slide ${i + 1}: Title is required.` }); setSaving(false); return; }
+                if (!s.image) { setMsg({ type: "error", text: `Slide ${i + 1}: Please upload an image.` }); setSaving(false); return; }
+
+                setMsg({ type: "info", text: `⏳ Uploading image ${i + 1}/${slides.length}...` });
+                const imgUrl = s.image.startsWith("data:")
+                    ? await uploadToCloudinary(s.image, "sewaam/hero-slider")
+                    : s.image;
+
+                uploaded.push({ ...s, image: imgUrl });
+            }
+
+            setMsg({ type: "info", text: "💾 Saving slides..." });
+            const res = await fetch(`${BASE_URL}/hero-slides`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ slides: uploaded }),
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || "Save failed");
+
+            setSlides(data.slides.map((s) => ({ ...emptySlide(), ...s })));
+            setMsg({ type: "success", text: "✅ Hero slider updated! Changes are live on the home page." });
+        } catch (err) {
+            setMsg({ type: "error", text: `❌ ${err.message}` });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    if (loading) return <div style={{ padding: "40px", textAlign: "center", color: "#666" }}>Loading slides…</div>;
+
+    return (
+        <div>
+            <div className="panel-action-bar">
+                <div>
+                    <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "700" }}>
+                        Hero Slider — Home Page Banner
+                    </h3>
+                    <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#666" }}>
+                        Upload up to 4 images. They auto-rotate on the home page with title and description.
+                    </p>
+                </div>
+                {slides.length < MAX_SLIDES && (
+                    <button className="btn-primary-action" type="button" onClick={addSlide}>
+                        + Add Slide ({slides.length}/{MAX_SLIDES})
+                    </button>
+                )}
+            </div>
+
+            {msg && <div className={`admin-alert-banner ${msg.type}`}>{msg.text}</div>}
+
+            <form onSubmit={handleSave}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                    {slides.map((slide, i) => (
+                        <div key={i} className="admin-card-form" style={{ position: "relative", padding: "24px" }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+                                <h4 style={{ margin: 0, fontSize: "14px", fontWeight: "700", color: "#171717" }}>
+                                    Slide {i + 1}
+                                </h4>
+                                {slides.length > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => removeSlide(i)}
+                                        style={{ background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: "6px", padding: "6px 12px", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}
+                                    >
+                                        Remove Slide
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="form-fields-grid">
+                                {/* Image uploader */}
+                                <div className="form-field-group full-width">
+                                    <label className="field-label">Slide Image *</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: "none" }}
+                                        ref={(el) => { fileRefs.current[i] = el; }}
+                                        onChange={(e) => handleImageFile(i, e.target.files[0])}
+                                    />
+                                    {!slide.image ? (
+                                        <div
+                                            className="direct-upload-box"
+                                            onClick={() => fileRefs.current[i]?.click()}
+                                            onDragOver={(e) => e.preventDefault()}
+                                            onDrop={(e) => { e.preventDefault(); handleImageFile(i, e.dataTransfer.files[0]); }}
+                                        >
+                                            <div className="upload-icon-circle">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                    <polyline points="17 8 12 3 7 8" />
+                                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                                </svg>
+                                            </div>
+                                            <div className="upload-prompt-text">Click to upload slide image (JPG, PNG, WEBP)</div>
+                                            <div className="upload-sub-text">Recommended: 1400 × 500 px landscape image</div>
+                                        </div>
+                                    ) : (
+                                        <div className="uploaded-preview-banner" style={{ alignItems: "flex-start" }}>
+                                            <div className="uploaded-preview-left">
+                                                <img
+                                                    src={slide.image}
+                                                    alt={`Slide ${i + 1}`}
+                                                    style={{ width: "120px", height: "68px", objectFit: "cover", borderRadius: "8px", border: "1px solid #e5e5e7" }}
+                                                />
+                                            </div>
+                                            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                                                <button type="button" className="btn-cancel-action" style={{ padding: "6px 12px", fontSize: "12px" }} onClick={() => fileRefs.current[i]?.click()}>
+                                                    Change Image
+                                                </button>
+                                                <button type="button" className="btn-remove-upload" onClick={() => updateSlide(i, "image", "")}>✕ Remove</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Title */}
+                                <div className="form-field-group full-width">
+                                    <label className="field-label">Slide Title *</label>
+                                    <input
+                                        className="field-input"
+                                        placeholder="e.g. Help Feed & Care for Animals Who Have No One"
+                                        value={slide.title}
+                                        onChange={(e) => updateSlide(i, "title", e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                {/* Subtitle */}
+                                <div className="form-field-group full-width">
+                                    <label className="field-label">Subtitle / Description</label>
+                                    <textarea
+                                        className="field-input"
+                                        rows="2"
+                                        placeholder="Short description shown below the title on the slider."
+                                        value={slide.subtitle}
+                                        onChange={(e) => updateSlide(i, "subtitle", e.target.value)}
+                                        style={{ resize: "vertical" }}
+                                    />
+                                </div>
+
+                                {/* Button */}
+                                <div className="form-field-group">
+                                    <label className="field-label">Button Label</label>
+                                    <input
+                                        className="field-input"
+                                        placeholder="Donate Now"
+                                        value={slide.buttonLabel}
+                                        onChange={(e) => updateSlide(i, "buttonLabel", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-field-group">
+                                    <label className="field-label">Button Link</label>
+                                    <input
+                                        className="field-input"
+                                        placeholder="/donate or /campaigns/slug"
+                                        value={slide.buttonLink}
+                                        onChange={(e) => updateSlide(i, "buttonLink", e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div style={{ marginTop: "24px", display: "flex", gap: "12px", alignItems: "center" }}>
+                    <button
+                        type="submit"
+                        className="btn-primary-action"
+                        disabled={saving}
+                        style={{ minWidth: "180px" }}
+                    >
+                        {saving ? "Saving…" : "💾 Save & Publish Slider"}
+                    </button>
+                    <span style={{ fontSize: "12.5px", color: "#888" }}>
+                        Changes go live on the home page immediately after saving.
+                    </span>
+                </div>
+            </form>
         </div>
     );
 }
