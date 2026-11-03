@@ -1,13 +1,33 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [workDropdownOpen, setWorkDropdownOpen] = useState(false);
-    const [searchOpen, setSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const navigate = useNavigate();
+    const [menuOpen,     setMenuOpen]     = useState(false);
+    const [aboutOpen,    setAboutOpen]    = useState(false);
+    const [searchOpen,   setSearchOpen]   = useState(false);
+    const [searchQuery,  setSearchQuery]  = useState("");
+    const navigate    = useNavigate();
+    const searchInput = useRef(null);
+
+    // Focus search input when it opens
+    useEffect(() => {
+        if (searchOpen) searchInput.current?.focus();
+    }, [searchOpen]);
+
+    // Close everything on Escape
+    useEffect(() => {
+        const onKey = (e) => {
+            if (e.key !== "Escape") return;
+            setMenuOpen(false);
+            setAboutOpen(false);
+            setSearchOpen(false);
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, []);
+
+    const closeMobile = () => { setMenuOpen(false); setAboutOpen(false); };
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
@@ -22,141 +42,151 @@ export default function Navbar() {
     return (
         <header className="site-navbar-header">
             <div className="site-navbar-container">
-                {/* 1. Left: Brand Logo */}
-                <Link to="/" className="site-navbar-brand" onClick={() => setMenuOpen(false)}>
-                    <img 
-                        src="/images/sewaam-logo.png" 
-                        alt="Sewaam Foundation" 
+
+                {/* ── Logo ─────────────────────────────────── */}
+                <Link to="/" className="site-navbar-brand" onClick={closeMobile}>
+                    <img
+                        src="/images/sewaam-logo.png"
+                        alt="Sewaam Foundation"
                         className="site-navbar-logo"
-                        onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = "/images/sewaam-logo.svg";
-                        }}
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/images/sewaam-logo.svg"; }}
                     />
                 </Link>
 
-                {/* 2. Center: Navigation Links */}
-                <nav className={`site-nav-links ${menuOpen ? "open" : ""}`}>
-                    <NavLink
-                        to="/"
-                        end
-                        className={({ isActive }) => `site-nav-link ${isActive ? "active" : ""}`}
-                        onClick={() => setMenuOpen(false)}
-                    >
+                {/* ── Desktop Nav ──────────────────────────── */}
+                <nav className={`site-nav-links ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
+
+                    <NavLink to="/" end className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
                         Home
                     </NavLink>
 
-                    <NavLink
-                        to="/campaigns"
-                        className={({ isActive }) => `site-nav-link ${isActive ? "active" : ""}`}
-                        onClick={() => setMenuOpen(false)}
-                    >
+                    <NavLink to="/campaigns" className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
                         Campaigns
                     </NavLink>
 
-                    {/* Our Work with Dropdown */}
-                    <Link to="/our-work" className="site-nav-link" onClick={() => setMenuOpen(false)}>
+                    <Link to="/our-work" className="site-nav-link" onClick={closeMobile}>
                         Our Work
                     </Link>
 
-                    <NavLink
-                        to="/monthly-giving"
-                        className={({ isActive }) => `site-nav-link ${isActive ? "active" : ""}`}
-                        onClick={() => setMenuOpen(false)}
-                    >
+                    <NavLink to="/monthly-giving" className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
                         Monthly Giving
                     </NavLink>
 
-                    <NavLink
-                        to="/about"
-                        className={({ isActive }) => `site-nav-link ${isActive ? "active" : ""}`}
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        About Us
-                    </NavLink>
-
-
-                    <NavLink
-                        to="/volunteer"
-                        className={({ isActive }) => `site-nav-link ${isActive ? "active" : ""}`}
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Volunteer
-                    </NavLink>
-
-                    <a href="/#contact" className="site-nav-link" onClick={() => setMenuOpen(false)}>
-                        Contact
-                    </a>
-
-                    {/* Mobile Only Donate Button */}
-                    <Link 
-                        to="/campaigns" 
-                        className="mobile-donate-btn"
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Donate Now ♡
-                    </Link>
-                </nav>
-
-                {/* 3. Right: Search & Donate Now Button */}
-                <div className="site-navbar-actions">
-                    {/* Search Icon / Bar */}
-                    <div className="site-search-wrap">
-                        {searchOpen ? (
-                            <form onSubmit={handleSearchSubmit} className="site-search-form">
-                                <input
-                                    type="text"
-                                    placeholder="Search causes..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    autoFocus
-                                    className="site-search-input"
-                                />
-                                <button type="submit" className="site-search-submit" aria-label="Submit Search">
-                                    🔍
-                                </button>
-                                <button
-                                    type="button"
-                                    className="site-search-close"
-                                    onClick={() => setSearchOpen(false)}
-                                    aria-label="Close search"
-                                >
-                                    ✕
-                                </button>
-                            </form>
-                        ) : (
-                            <button
-                                type="button"
-                                className="site-search-icon-btn"
-                                onClick={() => setSearchOpen(true)}
-                                aria-label="Open search bar"
+                    {/* About Us with dropdown */}
+                    <div className="site-nav-dropdown-wrap">
+                        <button
+                            type="button"
+                            className="site-nav-link dropdown-trigger"
+                            aria-expanded={aboutOpen}
+                            onClick={() => setAboutOpen((o) => !o)}
+                        >
+                            About Us
+                            <svg
+                                className={`dropdown-chevron-svg${aboutOpen ? " rotated" : ""}`}
+                                width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" strokeWidth="2.5"
+                                strokeLinecap="round" strokeLinejoin="round"
                             >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                </svg>
-                            </button>
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </button>
+
+                        {aboutOpen && (
+                            <div className="site-nav-dropdown-menu">
+                                <Link to="/about"     className="dropdown-item" onClick={closeMobile}>Our Story</Link>
+                                <Link to="/our-work"  className="dropdown-item" onClick={closeMobile}>Our Work</Link>
+                                <a href="/#contact"   className="dropdown-item" onClick={closeMobile}>Contact</a>
+                            </div>
                         )}
                     </div>
 
-                    {/* Red Donate Now Button with Heart */}
-                    <Link to="/campaigns" className="navbar-donate-pill-btn">
-                        Donate Now <span className="nav-heart-icon">♡</span>
+                    <NavLink to="/volunteer" className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
+                        Volunteer
+                    </NavLink>
+
+                    <a href="/#contact" className="site-nav-link" onClick={closeMobile}>
+                        Contact
+                    </a>
+
+                    {/* Mobile-only donate */}
+                    <Link to="/campaigns" className="mobile-donate-btn" onClick={closeMobile}>
+                        Donate Now ♥
+                    </Link>
+                </nav>
+
+                {/* ── Right Actions ────────────────────────── */}
+                <div className="site-navbar-actions">
+
+                    {/* Search icon button */}
+                    <button
+                        type="button"
+                        className="nav-icon-circle-btn"
+                        aria-label="Search"
+                        aria-expanded={searchOpen}
+                        onClick={() => setSearchOpen((o) => !o)}
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </button>
+
+                    {/* User / account icon button */}
+                    <Link to="/admin" className="nav-icon-circle-btn" aria-label="Admin login">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
                     </Link>
 
-                    {/* Mobile Hamburger Toggle */}
+                    {/* Orange Donate Now button */}
+                    <Link to="/campaigns" className="navbar-donate-pill-btn">
+                        Donate Now
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/>
+                        </svg>
+                    </Link>
+
+                    {/* Hamburger */}
                     <button
                         type="button"
                         className="mobile-hamburger-btn"
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        aria-label="Toggle navigation menu"
+                        onClick={() => setMenuOpen((o) => !o)}
+                        aria-label="Toggle menu"
+                        aria-expanded={menuOpen}
                     >
-                        <span className={`bar ${menuOpen ? "open" : ""}`} />
-                        <span className={`bar ${menuOpen ? "open" : ""}`} />
-                        <span className={`bar ${menuOpen ? "open" : ""}`} />
+                        <span className={`bar${menuOpen ? " open" : ""}`} />
+                        <span className={`bar${menuOpen ? " open" : ""}`} />
+                        <span className={`bar${menuOpen ? " open" : ""}`} />
                     </button>
                 </div>
             </div>
+
+            {/* ── Search bar dropdown ───────────────────── */}
+            {searchOpen && (
+                <form
+                    className="site-search-bar"
+                    role="search"
+                    onSubmit={handleSearchSubmit}
+                >
+                    <div className="site-search-inner">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input
+                            ref={searchInput}
+                            id="site-search"
+                            className="site-search-input"
+                            placeholder="Search campaigns, projects and stories…"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <button type="submit" className="site-search-go">Search</button>
+                        <button type="button" className="site-search-close" onClick={() => setSearchOpen(false)} aria-label="Close search">✕</button>
+                    </div>
+                </form>
+            )}
         </header>
     );
 }
