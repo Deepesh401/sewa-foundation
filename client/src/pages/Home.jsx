@@ -87,17 +87,7 @@ function HeroSlider() {
                     </span>
                 </div>
 
-                {/* Prev / Next arrows */}
-                {slides.length > 1 && (
-                    <>
-                        <button className="hero-slider-arrow hero-slider-arrow--prev" onClick={prev} aria-label="Previous slide">
-                            ‹
-                        </button>
-                        <button className="hero-slider-arrow hero-slider-arrow--next" onClick={next} aria-label="Next slide">
-                            ›
-                        </button>
-                    </>
-                )}
+
             </div>
 
             {/* Dot navigation */}

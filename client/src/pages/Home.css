@@ -568,35 +568,6 @@
     color: #fff;
 }
 
-/* Prev / Next arrows */
-.hero-slider-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 6;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    color: #fff;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.18s;
-    backdrop-filter: blur(4px);
-}
-
-.hero-slider-arrow:hover {
-    background: rgba(255,255,255,0.28);
-}
-
-.hero-slider-arrow--prev { left: 16px; }
-.hero-slider-arrow--next { right: 16px; }
-
 /* Slide counter bottom-right */
 .hero-slider-counter {
     position: absolute;
