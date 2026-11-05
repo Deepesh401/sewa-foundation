@@ -16,6 +16,7 @@ const volunteerRoutes    = require("./routes/volunteerRoutes");
 const contactRoutes      = require("./routes/contactRoutes");
 const uploadRoutes       = require("./routes/uploadRoutes");
 const heroSliderRoutes   = require("./routes/heroSliderRoutes");
+const authRoutes         = require("./routes/authRoutes");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/volunteers",    volunteerRoutes);
 app.use("/api/contact",       contactRoutes);
 app.use("/api/upload",        uploadRoutes);
 app.use("/api/hero-slides",   heroSliderRoutes);
+app.use("/api/auth",          authRoutes);
 
 // Test API
 app.get("/", (req, res) => {

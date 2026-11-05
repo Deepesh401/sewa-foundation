@@ -13,11 +13,13 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AccessDenied from "./pages/AccessDenied";
 import Volunteer from "./pages/Volunteer";
+import MyDonations from "./pages/MyDonations";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import DonationToast from "./components/DonationToast";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 import "./App.css";
 
@@ -43,6 +45,7 @@ function Layout() {
                     <Route path="/about" element={<About />} />
                     <Route path="/monthly-giving" element={<MonthlyGiving />} />
                     <Route path="/volunteer" element={<Volunteer />} />
+                    <Route path="/my-donations" element={<MyDonations />} />
                     <Route path="/donate" element={<Navigate to="/campaigns" replace />} />
                     <Route path="/donation-success" element={<DonationSuccess />} />
 
@@ -84,7 +87,9 @@ function App() {
 
     return (
         <BrowserRouter>
-            <Layout />
+            <AuthProvider>
+                <Layout />
+            </AuthProvider>
         </BrowserRouter>
     );
 }

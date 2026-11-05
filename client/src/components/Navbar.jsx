@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import AuthModal from "./AuthModal";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -7,8 +9,11 @@ export default function Navbar() {
     const [aboutOpen,    setAboutOpen]    = useState(false);
     const [searchOpen,   setSearchOpen]   = useState(false);
     const [searchQuery,  setSearchQuery]  = useState("");
+    const [authOpen,     setAuthOpen]     = useState(false);
+    const [profileOpen,  setProfileOpen]  = useState(false);
     const navigate    = useNavigate();
     const searchInput = useRef(null);
+    const { user, logout } = useAuth();
 
     // Focus search input when it opens
     useEffect(() => {
@@ -132,12 +137,42 @@ export default function Navbar() {
                     </button>
 
                     {/* User / account icon button */}
-                    <Link to="/admin" className="nav-icon-circle-btn" aria-label="Admin login">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                    </Link>
+                    {user ? (
+                        <div style={{ position: "relative" }}>
+                            <button
+                                className="nav-icon-circle-btn nav-user-avatar"
+                                onClick={() => setProfileOpen(o => !o)}
+                                aria-label="My account"
+                                style={{ background: "#2d7a1f", color: "#fff", fontWeight: 800, fontSize: 16, border: "none" }}
+                            >
+                                {user.name.charAt(0).toUpperCase()}
+                            </button>
+                            {profileOpen && (
+                                <div className="nav-profile-dropdown">
+                                    <div className="nav-profile-name">{user.name}</div>
+                                    <div className="nav-profile-email">{user.email}</div>
+                                    <hr style={{ margin: "8px 0", border: "none", borderTop: "1px solid #eee" }} />
+                                    <Link to="/my-donations" className="nav-profile-item" onClick={() => setProfileOpen(false)}>
+                                        💰 My Donations
+                                    </Link>
+                                    <button className="nav-profile-item nav-profile-logout" onClick={() => { logout(); setProfileOpen(false); }}>
+                                        Sign Out
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <button
+                            className="nav-icon-circle-btn"
+                            aria-label="Login"
+                            onClick={() => setAuthOpen(true)}
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </button>
+                    )}
 
                     {/* Orange Donate Now button */}
                     <Link to="/campaigns" className="navbar-donate-pill-btn">
@@ -187,6 +222,9 @@ export default function Navbar() {
                     </div>
                 </form>
             )}
+
+            {/* ── Auth Modal ────────────────────────────── */}
+            {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
         </header>
     );
 }
