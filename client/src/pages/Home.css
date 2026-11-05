@@ -1210,21 +1210,52 @@
 /* ── Left image ── */
 .impact-img-col {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .impact-img-frame {
     position: relative;
-    border-radius: 20px;
-    overflow: hidden;
+    width: 100%;
+    max-width: 480px;
+}
+
+/* Green square border frame offset behind image */
+.impact-img-frame::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: -20px;
+    bottom: -20px;
     border: 3px solid #2d7a1f;
-    box-shadow: 8px 8px 0 #d4eacc;
+    border-radius: 18px;
+    z-index: 0;
+}
+
+/* Green blob background splash */
+.impact-img-frame::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: 10px;
+    bottom: 10px;
+    background: radial-gradient(ellipse at 40% 50%, rgba(45,122,31,0.12) 0%, transparent 70%);
+    border-radius: 40% 60% 55% 45% / 45% 50% 50% 55%;
+    z-index: 0;
 }
 
 .impact-img {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    height: 420px;
+    height: 400px;
     object-fit: cover;
     display: block;
+    border-radius: 40% 60% 55% 45% / 45% 50% 50% 55%;
+    box-shadow: 0 12px 40px rgba(45,122,31,0.2);
 }
 
 /* ── Right content ── */
