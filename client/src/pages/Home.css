@@ -322,7 +322,7 @@
 
 .need-add-btn {
     width: 100%;
-    background-color: #f5a623;
+    background-color: #e60023;
     color: #1a1a1a;
     border: none;
     border-radius: 999px;
@@ -339,7 +339,7 @@
 }
 
 .need-add-btn:hover {
-    background-color: #e09510;
+    background-color: #c8001f;
     transform: translateY(-1px);
 }
 
@@ -451,7 +451,7 @@
 .contrib-amount {
     font-size: 13px;
     font-weight: 700;
-    color: #f5a623;
+    color: #e60023;
     margin: 0 0 1px;
 }
 
@@ -834,7 +834,7 @@
 /* Add to Donate button */
 .need-add-btn {
     width: 100%;
-    background: #f5a623;
+    background: #e60023;
     color: #1a1a1a;
     border: none;
     border-radius: 999px;
@@ -851,7 +851,7 @@
 }
 
 .need-add-btn:hover:not(:disabled) {
-    background: #e09510;
+    background: #c8001f;
     transform: translateY(-1px);
 }
 
@@ -1020,8 +1020,8 @@
     transition: border-color 0.2s;
 }
 
-.cart-custom-input-wrap:focus-within { border-color: #f5a623; }
-.cart-custom-input-wrap span { font-size: 15px; font-weight: 700; color: #f5a623; }
+.cart-custom-input-wrap:focus-within { border-color: #e60023; }
+.cart-custom-input-wrap span { font-size: 15px; font-weight: 700; color: #e60023; }
 
 .cart-custom-input {
     flex: 1;
@@ -1062,10 +1062,10 @@
     gap: 2px;
 }
 
-.cart-preset-btn:hover { border-color: #f5a623; color: #f5a623; }
+.cart-preset-btn:hover { border-color: #e60023; color: #e60023; }
 .cart-preset-btn.active, .cart-preset-btn.popular {
-    background: #f5a623;
-    border-color: #f5a623;
+    background: #e60023;
+    border-color: #e60023;
     color: #fff;
 }
 
@@ -1096,7 +1096,7 @@
 .cart-grand-total {
     font-size: 16px;
     font-weight: 800;
-    color: #f5a623;
+    color: #e60023;
     padding-top: 8px;
     border-top: 1.5px solid #f0ebe4;
     margin-top: 4px;
@@ -1107,7 +1107,7 @@
     margin: 10px 16px 0;
     padding: 8px 12px;
     background: #fff0e0;
-    border: 1px solid #f5a623;
+    border: 1px solid #e60023;
     border-radius: 8px;
     font-size: 12.5px;
     color: #b45309;
@@ -1122,7 +1122,7 @@
     width: calc(100% - 32px);
     margin: 14px 16px 0;
     padding: 14px;
-    background: #f5a623;
+    background: #e60023;
     color: #1a1a1a;
     border: none;
     border-radius: 999px;
@@ -1135,7 +1135,7 @@
 }
 
 .cart-pay-btn:hover:not(:disabled) {
-    background: #e09510;
+    background: #c8001f;
     transform: translateY(-1px);
 }
 
