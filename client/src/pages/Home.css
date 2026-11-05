@@ -234,8 +234,9 @@
 
 .need-product-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-    border-color: #d1d5db;
+    box-shadow: 0 10px 24px rgba(45,122,31,0.15);
+    background: #f0f7ee;
+    border-color: #2d7a1f;
 }
 
 .need-img-box {
