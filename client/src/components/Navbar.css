@@ -42,9 +42,15 @@
 .site-nav-links {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 4px;
     flex: 1;
     justify-content: center;
+    border: 1.5px solid #2d7a1f;
+    border-radius: 8px;
+    padding: 5px 8px;
+    max-width: fit-content;
+    margin: 0 auto;
+    background: rgba(45,122,31,0.03);
 }
 
 .site-nav-link {
@@ -65,23 +71,19 @@
     gap: 4px;
 }
 
-/* Animated underline on hover */
+/* Animated underline on hover — hidden, using box style instead */
 .site-nav-link::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    border-radius: 0;
-    background: #2d7a1f;
-    opacity: 0;
-    transform: scaleX(0.5);
-    transition: opacity 180ms ease, transform 180ms ease;
+    display: none;
 }
 
-.site-nav-link:hover { color: #2d7a1f; }
-.site-nav-link:hover::after { opacity: 1; transform: scaleX(1); }
+.site-nav-link:hover { 
+    color: #2d7a1f;
+    border: 1.5px solid #2d7a1f;
+    border-radius: 6px;
+    padding: 4px 10px;
+    background: rgba(45,122,31,0.06);
+}
+.site-nav-link:hover::after { opacity: 0; }
 
 .site-nav-link.active { 
     color: #2d7a1f; 
@@ -89,7 +91,8 @@
     border: 1.5px solid #2d7a1f;
     border-radius: 6px;
     padding: 4px 10px;
-    background: rgba(45,122,31,0.06);
+    background: rgba(45,122,31,0.08);
+    box-shadow: 0 0 8px rgba(45,122,31,0.2);
 }
 
 .site-nav-link.active::after {
