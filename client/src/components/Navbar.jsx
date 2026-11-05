@@ -69,9 +69,9 @@ export default function Navbar() {
                         Campaigns
                     </NavLink>
 
-                    <Link to="/our-work" className="site-nav-link" onClick={closeMobile}>
+                    <NavLink to="/our-work" className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
                         Our Work
-                    </Link>
+                    </NavLink>
 
                     <NavLink to="/monthly-giving" className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
                         Monthly Giving
@@ -109,9 +109,9 @@ export default function Navbar() {
                         Volunteer
                     </NavLink>
 
-                    <a href="/#contact" className="site-nav-link" onClick={closeMobile}>
+                    <NavLink to="/contact" className={({ isActive }) => `site-nav-link${isActive ? " active" : ""}`} onClick={closeMobile}>
                         Contact
-                    </a>
+                    </NavLink>
 
                     {/* Mobile-only donate */}
                     <Link to="/campaigns" className="mobile-donate-btn" onClick={closeMobile}>

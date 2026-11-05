@@ -42,12 +42,12 @@
 .site-nav-links {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     flex: 1;
     justify-content: center;
     border: 1.5px solid #2d7a1f;
     border-radius: 8px;
-    padding: 5px 8px;
+    padding: 6px 14px;
     max-width: fit-content;
     margin: 0 auto;
     background: rgba(45,122,31,0.03);
@@ -58,17 +58,18 @@
     font-weight: 600;
     color: #2b3530;
     text-decoration: none;
-    padding: 6px 0;
+    padding: 5px 14px;
     position: relative;
-    transition: color 180ms ease;
+    transition: all 0.18s ease;
     white-space: nowrap;
     background: none;
-    border: none;
+    border: 1.5px solid transparent;
     cursor: pointer;
     font-family: inherit;
     display: flex;
     align-items: center;
     gap: 4px;
+    border-radius: 6px;
 }
 
 /* Animated underline on hover — hidden, using box style instead */
@@ -86,18 +87,16 @@
 .site-nav-link:hover::after { opacity: 0; }
 
 .site-nav-link.active { 
-    color: #2d7a1f; 
+    color: #ffffff; 
     font-weight: 700;
     border: 1.5px solid #2d7a1f;
     border-radius: 6px;
-    padding: 4px 10px;
-    background: rgba(45,122,31,0.08);
-    box-shadow: 0 0 8px rgba(45,122,31,0.2);
+    padding: 5px 14px;
+    background: #2d7a1f;
+    box-shadow: 0 2px 8px rgba(45,122,31,0.3);
 }
 
-.site-nav-link.active::after {
-    display: none;
-}
+.site-nav-link.active::after { display: none; }
 
 /* ── About Us dropdown ──────────────────────────────────────── */
 .site-nav-dropdown-wrap { position: relative; }
@@ -174,8 +173,8 @@
 .navbar-donate-pill-btn {
     height: 46px;
     padding: 0 22px;
-    border-radius: 999px;
-    background: #ff6600;
+    border-radius: 8px;
+    background: #e60023;
     color: #ffffff;
     font-size: 15px;
     font-weight: 700;
@@ -183,16 +182,22 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 10px 12px rgba(255,102,0,0.32);
-    transition: background 180ms, box-shadow 180ms, transform 180ms;
+    box-shadow: 0 4px 0 #9e0018;
+    transition: background 180ms, transform 180ms, box-shadow 180ms;
     white-space: nowrap;
     flex-shrink: 0;
 }
 
 .navbar-donate-pill-btn:hover {
-    background: #e85d00;
-    box-shadow: 0 12px 18px rgba(255,102,0,0.38);
+    background: #c8001f;
     transform: translateY(-1px);
+    color: #ffffff;
+}
+
+.navbar-donate-pill-btn:active {
+    background: #9e0018;
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #9e0018;
     color: #ffffff;
 }
 
