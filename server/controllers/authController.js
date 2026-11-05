@@ -1,4 +1,5 @@
 const jwt      = require("jsonwebtoken");
+const bcrypt   = require("bcryptjs");
 const User     = require("../models/User");
 const Donation = require("../models/Donation");
 
@@ -9,8 +10,10 @@ const signToken = (id) =>
 const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
+
         if (!name || !email || !password)
             return res.status(400).json({ success: false, message: "All fields are required." });
+
         if (password.length < 6)
             return res.status(400).json({ success: false, message: "Password must be at least 6 characters." });
 
@@ -18,7 +21,10 @@ const register = async (req, res) => {
         if (existing)
             return res.status(400).json({ success: false, message: "Email already registered. Please login." });
 
-        const user  = await User.create({ name, email, password });
+        // Hash password here — no pre-save hook
+        const hashed = bcrypt.hashSync(password, 10);
+
+        const user  = await User.create({ name, email, password: hashed });
         const token = signToken(user._id);
 
         return res.status(201).json({
@@ -36,6 +42,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
         if (!email || !password)
             return res.status(400).json({ success: false, message: "Email and password are required." });
 
@@ -43,7 +50,7 @@ const login = async (req, res) => {
         if (!user)
             return res.status(401).json({ success: false, message: "Invalid email or password." });
 
-        const isMatch = await user.matchPassword(password);
+        const isMatch = bcrypt.compareSync(password, user.password);
         if (!isMatch)
             return res.status(401).json({ success: false, message: "Invalid email or password." });
 
@@ -59,7 +66,7 @@ const login = async (req, res) => {
     }
 };
 
-// GET /api/auth/me  (requires token)
+// GET /api/auth/me
 const getMe = async (req, res) => {
     try {
         const user = await User.findById(req.userId).select("-password");
@@ -70,7 +77,7 @@ const getMe = async (req, res) => {
     }
 };
 
-// GET /api/auth/my-donations  (requires token)
+// GET /api/auth/my-donations
 const getMyDonations = async (req, res) => {
     try {
         const user = await User.findById(req.userId).select("email");

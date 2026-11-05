@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt   = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
     {
@@ -9,18 +8,5 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
-
-// Hash password before saving
-userSchema.pre("save", function (next) {
-    if (!this.isModified("password")) return next();
-    const salt = bcrypt.genSaltSync(10);
-    this.password = bcrypt.hashSync(this.password, salt);
-    next();
-});
-
-// Compare password
-userSchema.methods.matchPassword = function (entered) {
-    return bcrypt.compareSync(entered, this.password);
-};
 
 module.exports = mongoose.model("User", userSchema);
