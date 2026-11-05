@@ -83,12 +83,17 @@
 .site-nav-link:hover { color: #2d7a1f; }
 .site-nav-link:hover::after { opacity: 1; transform: scaleX(1); }
 
-.site-nav-link.active { color: #2d7a1f; font-weight: 700; }
+.site-nav-link.active { 
+    color: #2d7a1f; 
+    font-weight: 700;
+    border: 1.5px solid #2d7a1f;
+    border-radius: 6px;
+    padding: 4px 10px;
+    background: rgba(45,122,31,0.06);
+}
+
 .site-nav-link.active::after {
-    background: #2d7a1f;
-    opacity: 1;
-    transform: scaleX(1);
-    box-shadow: 0 2px 8px rgba(45,122,31,0.35);
+    display: none;
 }
 
 /* ── About Us dropdown ──────────────────────────────────────── */
