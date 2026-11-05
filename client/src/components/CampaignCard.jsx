@@ -99,9 +99,12 @@ export default function CampaignCard({ campaign }) {
                     </div>
                 </div>
 
-                {/* progress bar */}
-                <div className="cc-progress-track">
-                    <div className="cc-progress-fill" style={{ width: `${Math.max(percentage, 1)}%` }} />
+                {/* progress bar with percentage */}
+                <div className="cc-progress-wrap">
+                    <div className="cc-progress-track">
+                        <div className="cc-progress-fill" style={{ width: `${Math.max(percentage, 1)}%` }} />
+                    </div>
+                    <span className="cc-progress-pct">{percentage}%</span>
                 </div>
 
                 {/* donate button */}

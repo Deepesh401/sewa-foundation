@@ -626,6 +626,96 @@ export default function Home() {
 
             {/* ── 5. RESPECTED CONTRIBUTORS ─────────────────────────── */}
             <ContributorsMarquee />
+
+            {/* ── 6. OUR IMPACT ─────────────────────────────────────── */}
+            <section className="impact-section">
+                <div className="impact-container">
+
+                    {/* LEFT — image */}
+                    <div className="impact-img-col">
+                        <div className="impact-img-frame">
+                            <img
+                                src="/images/campaign-child-education.jpg"
+                                alt="Children smiling"
+                                className="impact-img"
+                            />
+                        </div>
+                    </div>
+
+                    {/* RIGHT — content */}
+                    <div className="impact-content-col">
+                        {/* Badge */}
+                        <div className="impact-badge-row">
+                            <span className="impact-badge-line" />
+                            <span className="impact-badge">
+                                🌿 OUR IMPACT
+                            </span>
+                            <span className="impact-badge-line" />
+                        </div>
+
+                        <h2 className="impact-heading">
+                            Creating Real Change,<br />One Life at a Time
+                        </h2>
+                        <p className="impact-sub">
+                            From feeding the hungry and caring for animals to supporting
+                            education and reaching rural communities — our work brings
+                            hope, dignity, and lasting change.
+                        </p>
+
+                        {/* 2×2 feature grid */}
+                        <div className="impact-features-grid">
+                            <div className="impact-feature">
+                                <div className="impact-feature-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div className="impact-feature-title">Meals Support</div>
+                                    <div className="impact-feature-desc">Nutritious food for people in need.</div>
+                                </div>
+                            </div>
+                            <div className="impact-feature">
+                                <div className="impact-feature-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-3a5 5 0 0 1 5-5z"/><circle cx="4" cy="8" r="2"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div className="impact-feature-title">Animal Care</div>
+                                    <div className="impact-feature-desc">Rescue, feeding and medical support.</div>
+                                </div>
+                            </div>
+                            <div className="impact-feature">
+                                <div className="impact-feature-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div className="impact-feature-title">Education Support</div>
+                                    <div className="impact-feature-desc">Learning opportunities for a brighter future.</div>
+                                </div>
+                            </div>
+                            <div className="impact-feature">
+                                <div className="impact-feature-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d7a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div className="impact-feature-title">Community Outreach</div>
+                                    <div className="impact-feature-desc">Working with rural communities for long-term change.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="/our-work" className="impact-cta-btn">
+                            Explore Our Work →
+                        </a>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }
