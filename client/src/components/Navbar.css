@@ -73,21 +73,22 @@
     left: 0;
     right: 0;
     height: 2px;
-    border-radius: 999px;
-    background: #407a12;
+    border-radius: 0;
+    background: #2d7a1f;
     opacity: 0;
     transform: scaleX(0.5);
     transition: opacity 180ms ease, transform 180ms ease;
 }
 
-.site-nav-link:hover { color: #407a12; }
+.site-nav-link:hover { color: #2d7a1f; }
 .site-nav-link:hover::after { opacity: 1; transform: scaleX(1); }
 
-.site-nav-link.active { color: #ff6600; font-weight: 700; }
+.site-nav-link.active { color: #2d7a1f; font-weight: 700; }
 .site-nav-link.active::after {
-    background: #ff6600;
+    background: #2d7a1f;
     opacity: 1;
     transform: scaleX(1);
+    box-shadow: 0 2px 8px rgba(45,122,31,0.35);
 }
 
 /* ── About Us dropdown ──────────────────────────────────────── */
