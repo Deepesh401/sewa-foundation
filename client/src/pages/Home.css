@@ -351,7 +351,8 @@
 /* ── 5. RESPECTED CONTRIBUTORS MARQUEE ─────────────────────── */
 .contrib-section {
     padding: 60px 0 70px;
-    background: linear-gradient(180deg, #fef9f0 0%, #fdf3e3 100%);
+    background: #ffffff;
+}
     overflow: hidden;
 }
 
@@ -1218,16 +1219,15 @@
 .impact-img-frame {
     position: relative;
     width: 100%;
-    max-width: 460px;
 }
 
 .impact-img-frame::before {
     content: "";
     position: absolute;
-    bottom: -14px;
-    right: -14px;
-    width: 80%;
-    height: 80%;
+    bottom: -12px;
+    right: -12px;
+    left: 30px;
+    top: 30px;
     border: 2.5px solid #2d7a1f;
     border-radius: 14px;
     z-index: 0;
@@ -1239,8 +1239,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    height: auto;
-    max-height: 460px;
+    height: 460px;
     object-fit: contain;
     object-position: center;
     display: block;
