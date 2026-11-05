@@ -635,7 +635,7 @@ export default function Home() {
                     <div className="impact-img-col">
                         <div className="impact-img-frame">
                             <img
-                                src="/images/Screenshot 2026-11-05 213145.png"
+                                src="/images/Cheerful Children Peace Sign Cutout (1).png"
                                 alt="Children smiling"
                                 className="impact-img"
                             />
